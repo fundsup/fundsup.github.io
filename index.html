@@ -1,0 +1,976 @@
+<html>
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,700italic,700,500italic' rel='stylesheet' type='text/css' />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Fundsup</title>
+		<style>
+			body
+			{
+				margin:0;
+				font-family: 'Roboto', sans-serif !important;
+				background:#F4F4F4;
+			}
+			.text-center
+			{
+				text-align:center !important;
+			}
+			.text-left
+			{
+				text-align:left !important;
+			}
+			.text-right
+			{
+				text-align:right !important;
+			}
+			.outer-wrapper
+			{
+				
+				margin:auto;
+				padding:10px;
+			}
+			.card-view
+			{
+				padding:10px 0;
+				width:100%;
+				
+			}
+			.card-view-inner
+			{
+				background:#FFF;
+				padding:10px 10px;
+				box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+			}
+			.card-view-inner .md-subhead
+			{
+				text-align:left;
+			}
+			.card-view-inner .md-title
+			{
+				text-align:right;
+			}
+			.card-view-inner [layout="row"]
+			{
+				padding:5px 5px;
+			}
+			.header-outer-wrapper
+			{
+				background:#FFF;
+				height:60px;
+				width:100%;
+				box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+			}
+			.stock-container
+			{
+				padding:5px;
+			}
+			.stock-container .gain
+			{
+				color:#43A047;
+				position:relative;
+				vertical-align: middle;
+				
+
+			}
+			.stock-container .fa{
+				vertical-align: middle;
+			}
+			.stock-container .gain .fa:before
+			{
+				content: "\f0de";
+			}
+			.stock-container .loss
+			{
+				color:#e53935;
+				position:relative;
+				vertical-align: middle;
+			}
+			.stock-container .loss .fa:before
+			{
+				content: "\f0dd";
+			}
+			.stock-container
+			{
+				border-bottom:1px solid #e2e2e2;
+			}
+			.stock-container:last-child
+			{
+				border:none;
+			}
+			.updated-time
+			{
+				border-bottom:1px solid #e2e2e2;
+				font-weight:bold;
+				margin-bottom:5px;
+				padding:0 5px;
+			}
+			.fab-container
+			{
+				position:fixed;
+				bottom:10px;
+				right:10px;
+			}
+			.credit-wrapper
+			{
+				margin:25px 0;
+				text-align: center;
+			}
+			.credit-wrapper .fa
+			{
+				color:#f44336;
+			}
+			.fab-container .fab-btn
+			{
+				background:#5E35B1;
+				color:#FFF;
+			}
+			.logo
+			{
+				color:#5E35B1;
+				font-weight:bold;
+				text-align: center;
+				padding:15px 0 0;
+				font-size:30px;
+			}
+			.stock-name
+			{
+				font-size:14px;
+			}
+			.current-price
+			{
+				font-size:15px;
+			}
+			.todays-change
+			{
+				font-size:14px;
+			}
+			.holdings
+			{
+				font-size:14px;
+			}
+			.material-icons
+			{
+				vertical-align:middle;
+				color:#757575;
+			}
+			.swip-container
+			{
+				overflow:hidden;
+			}
+			.swip-container>div
+			{
+				width:200%;
+				transition:all 0.2s ease;
+			}
+			.no-swip-container,.swipe-out-container
+			{
+				display:inline-block;
+				width:100%;
+				vertical-align:middle;
+			}
+			.swiped-left.swip-container>div
+			{
+				transform: translateX(-50%);
+			}
+			.swipe-out-actions
+			{
+				
+			}
+			.swipe-out-actions .buy-icon
+			{
+				background:#00897B;
+			}
+			.swipe-out-actions .sell-icon
+			{
+				background:#5E35B1;
+			}
+			.swipe-out-actions .buy-icon,.swipe-out-actions .sell-icon
+			{
+				padding:6px;
+				color:#fff;
+			}
+			.swipe-out-actions .current-price
+			{ 
+				padding:5px;
+				
+				border:1px solid #e2e2e2;
+			}
+			.transcation-container
+			{
+				padding:10px 5px;
+				border-bottom:1px solid #e2e2e2;
+			}
+		</style>
+		
+		
+		
+	</head>
+	<body ng-app="fundsup">
+		<div class="header-outer-wrapper">
+			<div class="logo">
+				FundsUp
+			</div>
+		</div>
+		
+		<div class="outer-wrapper">	
+			<ui-view></ui-view>
+		
+		
+			<md-fab-speed-dial md-open="fabOpen" md-direction="up" class="md-scale fab-container">
+				<md-fab-trigger>
+				<md-button aria-label="menu" class="md-fab md-warn">
+					<i ng-if="!fabOpen" class="fa fa-bars" aria-hidden="true"></i>
+					<i ng-if="fabOpen" class="fa fa-times" aria-hidden="true"></i>
+				</md-button>
+				</md-fab-trigger>
+
+				<md-fab-actions>
+				<md-button ui-sref="addToWallet" aria-label="Add" class="md-fab  fab-btn md-raised md-mini">
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</md-button>
+				<md-button aria-label="Debit" class="md-fab fab-btn md-raised md-mini">
+					<i class="fa fa-minus" aria-hidden="true"></i>
+				</md-button>
+				<md-button ui-sref="buyfund" aria-label="Buy" class="md-fab fab-btn md-raised md-mini">
+					B
+				</md-button>
+				<md-button ui-sref="sellfund"aria-label="Sell" class="md-fab fab-btn md-raised md-mini">
+					S 
+				</md-button>
+				</md-fab-actions>
+			</md-fab-speed-dial>	
+			
+
+			<div class="credit-wrapper">
+				made with <i class="fa fa-heart" aria-hidden="true"></i> fundsup
+			</div>
+		</div>
+		
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+		<!-- Angular Material requires Angular.js Libraries -->
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+	
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+		<!-- Angular Material Library -->
+		<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+
+		<script src="js/hammer.min.js"></script>
+		<script src="js/angular.hammer.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-touch.js"></script>
+		
+		<script>
+			var user = localStorage.getItem("user");
+			var siteUrl = window.location.protocol+"//"+window.location.host+window.location.pathname;
+			if(user != null && typeof user != "undefined" && user != "") user = JSON.parse(user);
+			var app = angular.module("fundsup",['ngMaterial','ngMessages','ui.router','hmTouchEvents','ngTouch'])
+			.run(['$state', '$rootScope', function($state, $rootScope) {
+				$rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+					var publicPages = ['login','signup'];
+					if(publicPages.indexOf(toState.name) == -1)
+					{
+							if (window.user == null || window.user.token == null || window.user.token == "") {
+								// If logged out and transitioning to a logged in page:
+								e.preventDefault();
+								$state.go('login');
+							}
+
+					}
+					else
+					{
+						if (window.user != null)
+						{
+							e.preventDefault();
+							$state.go('overview');
+						}
+					}
+				});
+			}])
+			.config(function($stateProvider,$urlRouterProvider) {
+				
+				$stateProvider.state('login', {
+					url: '/login',
+					templateUrl: 'template/login.html',
+					controller:'loginController'
+				})
+				.state('overview', {
+					url: '/overview',
+					templateUrl: 'template/overview.html',
+					controller:'overviewController'
+				})
+				.state('signup', {
+					url: '/signup',
+					templateUrl: 'template/signup.html',
+					controller:'signupController'
+				}).state('buyfund', {
+					url: '/buyfund',
+					templateUrl: 'template/buyFund.html',
+					controller:'buyFundController'
+				})
+				.state('addToWallet', {
+					url: '/addToWallet',
+					templateUrl: 'template/addToWallet.html',
+					controller:'addToWalletController'
+				})
+				.state('sellfund', {
+					url: '/sellfund',
+					templateUrl: 'template/buyFund.html',
+					controller:'sellFundController'
+				})
+				.state('stockDetails', {
+					url: '/stockDetails/:id',
+					templateUrl: 'template/stockDetails.html',
+					controller:'stockDetailsController'
+				})
+				
+				
+				$urlRouterProvider.otherwise('/login');
+				
+			})
+			.factory("helperMethod",['$mdToast','$state',function($mdToast,$state){
+				var factory = {};
+				factory.showToast = function(message)
+				{
+					
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent(message)
+						.position("bottom" )
+						.hideDelay(3000)
+					);
+				}
+				factory.logout = function()
+				{
+					window.user = null;
+					localStorage.setItem("user",null);
+					$state.go('login');
+				}
+				return factory;
+			}])
+			.controller("mainController",['$scope','$mdToast',function($scope,$mdToast){
+
+				
+				
+			}])
+			.controller("stockDetailsController",["$scope","$http","helperMethod","$stateParams",'$state',function($scope,$http,helperMethod,$stateParams,$state){
+				if($stateParams.id == null || $stateParams.id == "" || $stateParams.id == "undefined")
+				{
+					$state.go("overview");
+				}
+				$scope.stockData = {};
+				$scope.getHumanTime = function(time)
+				{
+					var transDate = new Date(time);
+				
+					return transDate.getDate() +"-"+ (transDate.getMonth() + 1) +"-"+ transDate.getFullYear();
+				}
+				$scope.getTotalInvest = function()
+				{
+					return (parseFloat($scope.stockData.stock.quantity) * parseFloat($scope.stockData.stock.averagePrice)).toFixed(2);
+
+				}
+				$scope.getCurrentMarketValue = function()
+				{
+					var stockValue = parseFloat($scope.stockData.stock.quantity) * parseFloat($scope.stockData.stockCurrent.currentPrice);
+					return stockValue.toFixed(2);
+				}
+				$scope.getUnrealized = function()
+				{
+					var stockValue = $scope.getCurrentMarketValue();
+					var investValue = $scope.getTotalInvest();
+					return $scope.fix(stockValue - investValue);
+				}
+				$scope.getProfit = function()
+				{
+					var profit = 0;
+					for(var i=0;i<$scope.stockData.transactions.length;i++)
+					{
+						if($scope.stockData.transactions[i].type == "sell" && typeof $scope.stockData.transactions[i].averagePrice != "undefined" && $scope.stockData.transactions[i].averagePrice != null )
+						{
+							var sellAmount = parseFloat($scope.stockData.transactions[i].quantity) * parseFloat($scope.stockData.transactions[i].price);
+							var buyAmount = parseFloat($scope.stockData.transactions[i].quantity) * parseFloat($scope.stockData.transactions[i].averagePrice);
+							profit +=sellAmount-buyAmount;
+						}
+					
+					}
+					return $scope.fix(profit);
+				}
+				$scope.fix = function(d1)
+				{
+					return (parseFloat(d1)).toFixed(2);
+				}
+				$scope.getBrokerage = function(t)
+				{
+					return $scope.fix($scope.fundsIndiaBrokerage(t,true));
+				}
+				$scope.getTotalTransaction = function(t){
+				
+					return $scope.fix($scope.fundsIndiaBrokerage(t,false));
+				}
+				$scope.fundsIndiaBrokerage = function(t,isOnlyBrokerage)
+				{
+					var type = t.type;
+					var tradeAmount = $scope.fix(t.price) *  $scope.fix(t.quantity);
+					var brokerage = 0;
+					brokerage = (tradeAmount * 0.3)/100;
+					var stampDuty = (tradeAmount * 0.01)/100;
+					var transactionTax = (tradeAmount * 0.1)/100;
+					var transactionCharge = (tradeAmount * 0.0035)/100;
+					var serviceChargeOnBrokerage = (brokerage *0.14);
+					var serviceChargeOnTranseCharge = (transactionCharge * 0.14);
+					var swachhBharatCess = ((brokerage +transactionCharge ) * 0.5)/100;
+					var krishiKalyanCess = ((brokerage +transactionCharge ) * 0.5)/100;
+
+					var totalBrokerage = brokerage +stampDuty +transactionTax +transactionCharge +serviceChargeOnBrokerage +serviceChargeOnTranseCharge +swachhBharatCess +krishiKalyanCess;
+					if(!isOnlyBrokerage)
+					{
+						if(type == "buy")
+						{
+						return tradeAmount + totalBrokerage;
+						}
+						else
+						{
+						return tradeAmount - totalBrokerage;
+						}
+					}
+					else
+					{
+						return totalBrokerage;
+					}
+					
+
+				}
+
+				$http.get(siteUrl+"api/getStockDetails",{params:{id:$stateParams.id,token:user.token},data:""}).then(function(response){
+
+					if(response.data.relogin){helperMethod.logout(); return;}
+					if(response.data.success)
+					{
+						$scope.stockData = response.data.stockData;
+					}
+					else
+					{
+						helperMethod.showToast("Not able to retrive the stock data");
+						$state.go("overview");
+					}
+					
+
+
+				},function(response){
+					helperMethod.showToast("Not able to retrive the stock data");
+					$state.go("overview");
+				});
+				
+				
+				$scope.averageCalculator = {
+					amount:0,
+					calculated:false,
+					quantity:0,
+					averagePrice:0,
+					calculateAverage:function(){
+						
+						if($scope.averageCalculator.amount == "" || parseFloat($scope.averageCalculator.amount)<1) return;
+						
+						$scope.averageCalculator.quantity = $scope.fix($scope.fix($scope.averageCalculator.amount)/ $scope.fix($scope.stockData.stockCurrent.currentPrice));
+						$scope.averageCalculator.averagePrice = $scope.fix((parseFloat($scope.averageCalculator.amount) + parseFloat($scope.getCurrentMarketValue()))/(parseFloat($scope.averageCalculator.quantity) + parseFloat($scope.stockData.stock.quantity)));
+						$scope.averageCalculator.calculated = true;
+						
+						
+					},
+					resetCalculator:function(){
+						$scope.averageCalculator.amount = 0;
+						$scope.averageCalculator.calculated = false;
+						$scope.averageCalculator.quantity = 0;
+						$scope.averageCalculator.averagePrice= 0;
+					}
+				}
+
+
+
+
+			}])
+			.controller("overviewController",["$scope","$http","$interval","$mdDialog",'helperMethod','$state',function($scope,$http,$interval,$mdDialog,helperMethod,$state){
+				
+				$scope.dashboard = {
+						wallet:20,
+						marketInvest:20,
+						unrealised:20,
+						realised:20
+					
+				}
+				$scope.getSum = function(d1,d2)
+				{
+					return (parseFloat(d1)+ parseFloat(d2)).toFixed(2);
+
+				}
+				$scope.stocks = [
+				];
+				$scope.goToStock = function(st)
+				{
+
+					$state.go("stockDetails",{id:st.id});
+				}
+				$scope.fabOpen = false;
+				$scope.getDashboard = function()
+				{
+					$http.get(siteUrl+"api/dashboard",{params:{token:user.token},data:""}).then(function(response){
+							
+							if(response.data.relogin){helperMethod.logout(); return;}
+
+							$scope.stocks = response.data.stock;
+							$scope.dashboard.wallet = parseFloat(response.data.wallet).toFixed(2);
+							$scope.dashboard.marketInvest = parseFloat(response.data.marketInvest).toFixed(2);
+							$scope.dashboard.unrealised = parseFloat(response.data.unrealised).toFixed(2);
+							$scope.dashboard.realised = parseFloat(response.data.realised).toFixed(2);
+									
+									
+							
+							$scope.loadedTime = (new Date()).getTime()/1000;
+							$scope.updatedTime = "few seconds ago";
+
+						},function(response){
+						
+					});
+
+				}
+				$scope.getDashboard();
+				$scope.loadedTime = (new Date()).getTime()/1000;
+				$scope.updatedTime = "few seconds ago";
+
+				$scope.numberFormate = function (number, decPlaces) {
+					// 2 decimal places => 100, 3 => 1000, etc
+					decPlaces = Math.pow(10, decPlaces);
+
+					// Enumerate number abbreviations
+					var abbrev = ["k", "m", "b", "t"];
+
+					// Go through the array backwards, so we do the largest first
+					for (var i = abbrev.length - 1; i >= 0; i--) {
+
+						// Convert array index to "1000", "1000000", etc
+						var size = Math.pow(10, (i + 1) * 3);
+
+						// If the number is bigger or equal do the abbreviation
+						if (size <= number) {
+							// Here, we multiply by decPlaces, round, and then divide by decPlaces.
+							// This gives us nice rounding to a particular decimal place.
+							number = Math.round(number * decPlaces / size) / decPlaces;
+
+							// Handle special case where we round up to the next abbreviation
+							if ((number == 1000) && (i < abbrev.length - 1)) {
+								number = 1;
+								i++;
+							}
+
+							// Add the letter for the abbreviation
+							number += abbrev[i];
+
+							// We are done... stop
+							break;
+						}
+					}
+
+					return number;
+				}
+
+
+				$scope.getAgoTime = function(time){
+					var now = (new Date()).getTime()/1000;
+
+
+					var seconds = Math.floor(now - parseInt(time));
+
+					var interval = Math.floor(seconds / 31536000);
+
+					if (interval >0) {
+					return interval + " years ago";
+					}
+					interval = Math.floor(seconds / 2592000);
+					if (interval >0) {
+					return interval + " months ago";
+					}
+					interval = Math.floor(seconds / 86400);
+					if (interval > 0) {
+					return interval + " days ago";
+					}
+					interval = Math.floor(seconds / 3600);
+					if (interval > 0) {
+					return interval + " hours ago";
+					}
+					interval = Math.floor(seconds / 60);
+					if (interval > 0) {
+					return interval + " minutes ago";
+					}
+					return Math.floor(seconds) + " seconds ago"; 
+				}
+
+					$scope.counterInstance = $interval(function(){
+
+							$scope.updatedTime = $scope.getAgoTime($scope.loadedTime);
+
+					},60000);
+
+				$scope.addStock = function(ev)
+				{
+					$mdDialog.show({
+						controller: "addStockController",
+						templateUrl: 'template/addStock.html',
+						parent: angular.element(document.body),
+						targetEvent: ev,
+						clickOutsideToClose:true,
+						fullscreen: true // Only for -xs, -sm breakpoints.
+					})
+					.then(function(stock) {
+						$http.post(siteUrl+"api/addStock",{id:stock._id,token:user.token}).then(function(response){
+							
+							if(response.data.relogin){helperMethod.logout(); return;}
+
+							if(response.data.success){
+								helperMethod.showToast("stock added");
+								$scope.getDashboard();
+							}else
+							{
+								
+								
+								helperMethod.showToast("sorry unable to add the stock try again");
+							}
+
+
+						},function(){
+								helperMethod.showToast("sorry unable to add the stock try again");
+						});
+
+					}, function() {
+						
+					});
+
+				}
+					
+			}])
+			.controller("addStockController",["$scope","$mdDialog","$http",function($scope,$mdDialog,$http){
+				
+				$scope.selectedItem = null;
+				$scope.searchText = null;
+				$scope.data = [];
+				$scope.querySearch = function(text)
+				{
+					
+					return $http.get(siteUrl+'getFunds',{params:{name:text},data:""})
+					.then(function(result) {
+						if(text == $scope.searchText)
+							$scope.data = result.data;
+						return result.data;
+					});
+				}
+				
+				$scope.hide = function() {
+					$mdDialog.hide();
+				};
+
+				$scope.cancel = function() {
+					$mdDialog.cancel();
+				};
+
+				$scope.add = function() {
+					if($scope.selectedItem != null && typeof $scope.selectedItem != "undefined")
+					{
+
+						$mdDialog.hide($scope.selectedItem);
+
+					}
+					
+					
+					
+					
+				};
+
+			}])
+			.controller("addToWalletController",['$scope','$http','$state','helperMethod',function($scope,$http,$state,helperMethod){
+				$scope.loading = false;
+				$scope.money = 0;
+				$scope.addToWallet = function()
+				{
+					if($scope.money != null && typeof $scope.money != "undefined" && $scope.money >0)
+					{
+						$http.post(siteUrl+"api/addToWallet",{token:user.token,money:$scope.money}).then(function(response){
+							if(response.data.relogin){helperMethod.logout(); return;}
+							if(response.data.success)
+							{
+								helperMethod.showToast("Money added to wallet successfully");
+								$state.go("overview");
+							}
+							else
+							{
+								helperMethod.showToast("sorry unable to add to wallet");
+							}
+
+						},function(response){
+
+							helperMethod.showToast("sorry unable to add the stock try again");
+						});
+
+
+
+					}
+
+
+				}
+
+
+			}])
+			
+			.controller("sellFundController",['$scope','$http','helperMethod','$state',function($scope,$http,helperMethod,$state){
+				$scope.loading = false;
+				$scope.fund = {
+					rate:"",
+					quantity:"",
+					stock:""
+				}
+				$scope.searchText = null;
+				$scope.data = [];
+				$scope.querySearch = function(text)
+				{
+					
+					return $http.get(siteUrl+'api/getBoughtFunds',{params:{name:text,token:user.token},data:""})
+					.then(function(result) {
+							if(result.data.relogin) return helperMethod.logout();
+						if(text == $scope.searchText)
+						{
+								var data= [];
+								for(var i=0;i<result.data.length;i++)
+								{
+									if(result.data[i].fund != null)
+									{
+										data.push(result.data[i].fund);
+									}
+								}
+								$scope.data = data;
+						}
+						
+						return result.data;
+					});
+				}
+				$scope.buyFund = function()
+				{
+
+					if(
+						$scope.fund.rate != null && typeof $scope.fund.rate != "undefined" && $scope.fund.rate != "" && !isNaN($scope.fund.rate) && 
+						$scope.fund.quantity != null && typeof $scope.fund.quantity != "undefined" && $scope.fund.quantity != "" && !isNaN($scope.fund.quantity) &&
+						$scope.fund.stock != null && typeof $scope.fund.stock != "undefined" && $scope.fund.stock != ""
+					){
+						
+						if(parseFloat($scope.fund.rate)>0 && parseInt($scope.fund.quantity)>0)
+						{
+							$scope.loading = true;
+							$http.post(siteUrl+"api/sellFund",{token:user.token,fund:$scope.fund}).then(function(response){
+
+								if(response.data.relogin) return helperMethod.logout();
+								if(response.data.success)
+								{
+									helperMethod.showToast("added successfully");
+									$state.go("overview");
+								}
+								else
+								{
+									helperMethod.showToast(response.data.message);
+								}
+
+							},function(){
+
+								helperMethod.showToast("Unable to reach the server at this time. Try again");
+
+							}).finally(function(){
+								$scope.loading = false;
+							});
+
+
+						}
+						else
+						{
+							helperMethod.showToast("rate and quantity is not in the valid format");
+						}
+
+
+					}
+					else
+						helperMethod.showToast("Please add the all the required fields");
+				}
+
+
+			}])
+			.controller("buyFundController",['$scope','$http','helperMethod','$state',function($scope,$http,helperMethod,$state){
+				$scope.loading = false;
+				$scope.fund = {
+					rate:"",
+					quantity:"",
+					stock:"",
+					skipBrokrage:false
+				}
+				$scope.searchText = null;
+				$scope.data = [];
+				$scope.querySearch = function(text)
+				{
+					
+					return $http.get(siteUrl+'getFunds',{params:{name:text},data:""})
+					.then(function(result) {
+						if(text == $scope.searchText)
+							$scope.data = result.data;
+						return result.data;
+					});
+				}
+				$scope.buyFund = function()
+				{
+
+					if(
+						$scope.fund.rate != null && typeof $scope.fund.rate != "undefined" && $scope.fund.rate != "" && !isNaN($scope.fund.rate) && 
+						$scope.fund.quantity != null && typeof $scope.fund.quantity != "undefined" && $scope.fund.quantity != "" && !isNaN($scope.fund.quantity) &&
+						$scope.fund.stock != null && typeof $scope.fund.stock != "undefined" && $scope.fund.stock != ""
+					){
+						
+						if(parseFloat($scope.fund.rate)>0 && parseInt($scope.fund.quantity)>0)
+						{
+							$scope.loading = true;
+							$http.post(siteUrl+"api/buyFund",{token:user.token,fund:$scope.fund}).then(function(response){
+
+								if(response.data.relogin) return helperMethod.logout();
+								if(response.data.success)
+								{
+									helperMethod.showToast("added successfully");
+									$state.go("overview");
+								}
+								else
+								{
+									helperMethod.showToast(response.data.message);
+								}
+
+							},function(){
+
+								helperMethod.showToast("Unable to reach the server at this time. Try again");
+
+							}).finally(function(){
+								$scope.loading = false;
+							});
+
+
+						}
+						else
+						{
+							helperMethod.showToast("rate and quantity is not in the valid format");
+						}
+
+
+					}
+					else
+						helperMethod.showToast("Please add the all the required fields");
+				}
+
+
+			}])
+			.controller("loginController",['$scope','$http','$state','helperMethod',function($scope,$http,$state,helperMethod){
+				$scope.user = {
+					emailId:"",
+					password:""
+				}
+			
+
+				$scope.loading = false;
+				
+				$scope.login = function()
+				{
+					
+					if($scope.user.emailId != null && typeof $scope.user.emailId != "undefined" && $scope.user.emailId != "" && $scope.user.password !="" && $scope.user.password != null && typeof $scope.user.password != "undefined")
+					{
+						$scope.loading = true;
+						$http.post(siteUrl+"api/authenticate",{emailId:$scope.user.emailId,password:$scope.user.password}).then(function(response){
+
+							if(response.data.success)
+							{
+								window.user = response.data.user;
+								helperMethod.showToast("login successful");
+								localStorage.setItem("user",angular.toJson(window.user));
+								$state.go('overview');
+							}
+							else
+							{
+								helperMethod.showToast(response.data.message);
+							}
+
+						},function(response){
+
+
+						}).finally(function(){
+
+							$scope.loading = false;
+						});
+					}
+
+
+
+
+				}
+
+
+
+			}])
+			.controller("signupController",['$scope','$http','$state','helperMethod',function($scope,$http,$state,helperMethod){
+				$scope.user = {
+					emailId:"",
+					password:"",
+					name:""
+				}
+
+
+				$scope.loading = false;
+				
+				$scope.signup = function()
+				{
+					
+					if($scope.user.emailId != null && 
+						typeof $scope.user.emailId != "undefined" && 
+						$scope.user.emailId != "" && 
+						$scope.user.password !="" && 
+						$scope.user.password != null && 
+						typeof $scope.user.password != "undefined" &&
+						$scope.user.name != "" &&
+						$scope.user.name != null &&
+						typeof $scope.user.name != "undefined"
+					)
+					{
+						$scope.loading = true;
+						$http.post(siteUrl+"signup",{emailId:$scope.user.emailId,password:$scope.user.password,name:$scope.user.name}).then(function(response){
+
+							if(response.data.success)
+							{
+								
+								helperMethod.showToast("signup successful. relogin");
+								$state.go('login');
+
+							}
+							else
+							{
+								helperMethod.showToast(response.data.message);
+							}
+
+						},function(response){
+
+
+						}).finally(function(){
+
+							$scope.loading = false;
+						});
+					}
+				}
+
+			}])
+			
+		</script>
+	</body>
+</html>

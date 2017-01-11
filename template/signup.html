@@ -1,0 +1,39 @@
+ <form name="signupForm">
+    <md-content class="md-no-momentum">
+        <md-input-container class="md-block">
+        <!-- Use floating placeholder instead of label -->
+        <md-icon class="email"><i class="material-icons">email</i></md-icon>
+        <input ng-model="user.emailId" type="email" placeholder="Email (required)" ng-required="true">
+        <div ng-messages="signupForm.user.emailId.$error">
+            <div ng-message="required">This is required.</div>
+        </div>
+
+
+        </md-input-container>
+         <md-input-container class="md-block">
+            <!-- Use floating placeholder instead of label -->
+            <md-icon class="email"><i class="material-icons">face</i></md-icon>
+            <input ng-model="user.name" type="text" placeholder="name (required)" ng-required="true">
+            <div ng-messages="signupForm.user.name.$error">
+                <div ng-message="required">This is required.</div>
+            </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+            <!-- Use floating placeholder instead of label -->
+            <md-icon class="email"><i class="material-icons">vpn_key</i></md-icon>
+            <input ng-model="user.password" type="password" placeholder="password (required)" ng-required="true">
+            <div ng-messages="signupForm.user.password.$error">
+                <div ng-message="required">This is required.</div>
+            </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+            <md-button class="md-raised md-primary"  ng-disabled="loading" ng-click="signup()">Signup</md-button>
+            
+        </md-input-container>
+         <md-input-container class="md-block">
+            <div>
+                <a ui-sref="login">have account login now</a>
+            </div>
+        </md-input-container>
+    </md-content>
+ </form>

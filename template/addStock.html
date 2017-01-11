@@ -1,0 +1,56 @@
+<md-dialog>
+  <form ng-cloak name="addStockFrom">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add stock to watchlist</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content style="min-height:60vh;">
+      <div class="md-dialog-content">
+        <md-autocomplete
+          md-delay="100"
+          md-no-cache="true"
+          md-selected-item="selectedItem"
+          md-search-text="searchText"
+          md-search-text-change="querySearch(searchText)"
+          md-items="item in data"
+          md-item-text="item.name"
+          md-min-length="0"
+          md-require-match="true"
+          placeholder="Enter at least one letter of stock"
+          md-menu-class="autocomplete-custom-template" ng-required="true">
+        <md-item-template>
+          <span class="item-title">
+            <span> {{item.name}} </span>
+          </span>
+          <span class="item-metadata">
+            <span class="item-metastat">
+              <strong>{{item.code}}</strong> - <strong>{{item.id}}</strong>
+            </span>
+          </span>
+        </md-item-template>
+      </md-autocomplete>
+      <div ng-messages="addStockFrom.selectedItem.$error">
+        <div ng-message="required">This is required.</div>
+      </div>
+
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button class="md-raised md-primary md-button md-ink-ripple" ng-click="add()">
+        Add
+      </md-button>
+      <span flex></span>
+      <md-button class="md-raised md-button md-ink-ripple" ng-click="cancel()">
+       cancel
+      </md-button>
+      
+    </md-dialog-actions>
+  </form>
+</md-dialog>

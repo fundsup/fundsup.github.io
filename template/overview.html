@@ -1,0 +1,135 @@
+<div layout="row">
+    <div class="card-view">
+        <div class="card-view-inner">
+            <div layout="row" class="md-subhead updated-time">
+                Invest
+            </div>
+            <div layout="row">
+            <div flex class="md-subhead"><i class="material-icons">account_balance_wallet</i> Wallet</div>
+            <div flex class="md-title">{{dashboard.wallet}}</div>
+            
+            </div>
+            <div layout="row">
+                <div flex class="md-subhead"><i class="material-icons">web_asset</i> Market invest</div>
+                <div flex class="md-title">{{dashboard.marketInvest}}</div>
+                
+            </div>
+            <div layout="row">
+                <div flex class="md-subhead"><i class="material-icons">view_stream</i> Total</div>
+                <div flex class="md-title">{{getSum(dashboard.wallet , dashboard.marketInvest)}}</div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout="row">
+    <div class="card-view">
+        <div class="card-view-inner">
+            <div layout="row" class="md-subhead updated-time">
+                Profit
+            </div>
+            <div layout="row">
+            <div flex class="md-subhead"><i class="material-icons">turned_in</i> Realised</div>
+            <div flex class="md-title">{{dashboard.realised}}</div>
+            
+            </div>
+            <div layout="row">
+                <div flex class="md-subhead"><i class="material-icons">turned_in_not</i> Unrealised</div>
+                <div flex class="md-title">{{dashboard.unrealised}}</div>
+                
+            </div>
+            <div layout="row">
+                <div flex class="md-subhead"><i class="material-icons">view_stream</i> Total</div>
+                <div flex class="md-title"> {{getSum(dashboard.realised, dashboard.unrealised)}}</div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout="row">
+    <div class="card-view">
+        <div class="card-view-inner">
+            <div layout="row" class="md-subhead updated-time">
+                <div flex="80">updated {{updatedTime}}</div>
+                <div flex="20" class="text-right">
+                    
+                    <md-menu>
+                        <i class="fa fa-ellipsis-v" aria-hidden="true" ng-click="$mdOpenMenu($event)"></i>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="addStock($event)">
+                                Add watch stock
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="ctrl.checkVoicemail()">
+                                Add buy stock
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
+                                <md-button ng-click="ctrl.toggleNotifications()">
+                                Add sell stock
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+
+
+
+                </div>
+            </div>
+            <div class="stock-container" ng-repeat="st in stocks" ng-click="goToStock(st)" ng-swipe-left="st.showAction = true" ng-swipe-right="st.showAction = false" 	
+
+>
+				<div layout="column" class="swip-container" ng-class="st.showAction?'swiped-left':''">
+					<div layout="row">
+                        <div class="no-swip-container">
+                            <div layout="row">
+                                <div flex="60" class="text-left stock-name">
+                                    {{st.name}}
+                                </div>
+                                <div flex="40" class="md-title text-right current-price">
+                                    {{st.currentPrice}}
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div flex class=" text-left holdings">
+                                    <div class="{{st.profitType}}" ng-if="st.currentHolding">
+                                    <i class="material-icons">content_paste</i> <span>{{st.currentHolding}}%</span> <i class="fa"></i>
+                                    </div>
+                                </div>
+                                <div flex class=" text-right todays-change">
+                                    
+                                    <div class="{{st.changeType}}" >
+                                        <span>{{st.todayChange}}%</span> <i class="fa"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swipe-out-container">
+                            <div layout="row" class="stock-name ">
+                                <div class="text-center" flex>
+                                    {{st.name}}
+                                 </div>
+                            </div>
+                            <div layout="row"  class="swipe-out-actions">
+                                <div flex="33" class="text-center current-price">
+                                    {{st.currentPrice}}
+                                </div>
+                                <div flex="33" class="text-center buy-icon">
+                                    Buy
+                                </div>
+                                <div flex="33" class="text-center sell-icon">
+                                    Sell
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>

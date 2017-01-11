@@ -1,0 +1,55 @@
+<form name="buyfundForm">
+    
+    <md-autocomplete
+          md-delay="100"
+          md-no-cache="true"
+          md-selected-item="fund.stock"
+          md-search-text="searchText"
+          md-search-text-change="querySearch(searchText)"
+          md-items="item in data"
+          md-item-text="item.name"
+          md-min-length="0"
+          md-require-match="true"
+          placeholder="Enter at least one letter of stock"
+          md-menu-class="autocomplete-custom-template" ng-required="true">
+        <md-item-template>
+          <span class="item-title">
+            <span> {{item.name}} </span>
+          </span>
+          <span class="item-metadata">
+            <span class="item-metastat">
+              <strong>{{item.code}}</strong> - <strong>{{item.id}}</strong>
+            </span>
+          </span>
+        </md-item-template>
+      </md-autocomplete>
+      <div ng-messages="buyfundForm.stock.$error">
+        <div ng-message="required">This is required.</div>
+      </div>
+   
+    
+    
+    <md-input-container class="md-block">
+        <label>Rate</label>
+        <input  md-no-asterisk name="quantity" ng-model="fund.rate" ng-required="true">
+        <div ng-messages="buyfundForm.fund.rate.$error">
+            <div ng-message="required">This is required.</div>
+        </div>
+    </md-input-container>
+    
+    <md-input-container class="md-block">
+        <label>Quantity</label>
+        <input  md-no-asterisk name="quantity" ng-model="fund.quantity" ng-required="true">
+        <div ng-messages="buyfundForm.fund.quantity.$error">
+            <div ng-message="required">This is required.</div>
+        </div>
+    </md-input-container>
+     <md-input-container class="md-block">
+        <md-checkbox ng-model="fund.skipBrokrage" aria-label=" Skip brokrage">
+            Skip brokrage
+        </md-checkbox>
+    </md-input-container>
+    <md-input-container class="md-block">
+        <md-button class="md-raised md-primary" ng-disabled="loading" ng-click="buyFund()">Add</md-button>
+    </md-input-container>
+</form>

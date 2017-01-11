@@ -1,0 +1,141 @@
+<div class="card-view" ng-if="stockData.stock">
+    <div class="card-view-inner">
+        <div layout="row" >
+            <div flex class="text-center md-subhead">
+                {{stockData.stock.fund.name}}
+            </div>
+        </div>
+        <div layout="row">
+            <div flex >
+                <div class="md-subhead text-center">quantity</div>
+                <div class="md-title text-center">{{stockData.stock.quantity}}</div>
+            </div>
+            <div flex >
+                
+                <div class="md-subhead text-center">average price</div>
+                <div class="md-title text-center"> {{fix(stockData.stock.averagePrice)}}</div>
+            </div>
+        </div>
+        <div layout="row">
+            <div flex >
+                <div class="md-subhead text-center">total investment</div>
+                <div class="md-title text-center">{{getTotalInvest()}}</div>
+            </div>
+            <div flex >
+                
+                <div class="md-subhead text-center">current price</div>
+                <div class="md-title text-center" ng-class="stockData.stockCurrent.changeType"> {{stockData.stockCurrent.currentPrice}}</div>
+            </div>
+        </div>
+		<div layout="row">
+            <div flex >
+                <div class="md-subhead text-center">unrealised profit</div>
+                <div class="md-title text-center">{{getUnrealized()}}</div>
+            </div>
+            <div flex >
+                
+                <div class="md-subhead text-center">profit</div>
+                <div class="md-title text-center"> {{getProfit()}}</div>
+            </div>
+        </div>
+		
+    </div>
+
+</div>
+<div class="card-view">
+    <div class="card-view-inner">
+		<div>Average Calculator </div>
+		<md-input-container class="md-block" style="padding-bottom:0;margin-bottom:0;"> 
+			 <label>Amount</label>
+			<input type="number" ng-model="averageCalculator.amount"/>
+		</md-input-container>
+		<div layout="row" ng-if="averageCalculator.calculated">
+			<div flex>
+				<div>Quantity</div>
+				<div>{{averageCalculator.quantity}}</div>
+			</div>
+			<div flex>
+				<div>Average Price</div>
+				<div>{{averageCalculator.averagePrice}}</div>
+			</div>
+		
+		</div>
+		<md-button class="md-raised md-primary" ng-click="averageCalculator.calculateAverage()">Calculate</md-button>
+		<md-button class="md-raised md-primary" ng-if="averageCalculator.calculated" ng-click="averageCalculator.resetCalculator()">Reset</md-button>
+	</div>
+	
+</div>
+<div class="card-view">
+    <div class="card-view-inner">
+        <div>
+            Stock transaction
+        </div>
+        <div ng-repeat="transaction in stockData.transactions" class="transcation-container">
+            <div layout="row" class="transcation-time {{transaction.type}}">{{getHumanTime(transaction.transaction_at)}} - {{transaction.type}}</div>
+            <div layout="row" class="transcation-row">
+                <div flex >
+                    <div class="md-subhead text-center">Quantity</div>
+                    <div class="md-title text-center">{{fix(transaction.quantity)}}</div>
+                </div>
+                <div flex >
+                    
+                    <div class="md-subhead text-center">Price</div>
+                    <div class="md-title text-center"> {{fix(transaction.price)}}</div>
+                </div>
+            </div>
+            <div layout="row" class="transcation-row">
+                <div flex >
+                    <div class="md-subhead text-center">Type</div>
+                    <div class="md-title text-center">{{transaction.type}}</div>
+                </div>
+                <div flex >
+                    
+                    <div class="md-subhead text-center">Amount</div>
+                    <div class="md-title text-center"> {{fix(transaction.price * transaction.quantity)}}</div>
+                </div>
+            </div>
+            <div layout="row" class="transcation-row">
+                <div flex >
+                    <div class="md-subhead text-center">Brokerage</div>
+                    <div class="md-title text-center">{{getBrokerage(transaction)}}</div>
+                </div>
+                <div flex >
+                    
+                    <div class="md-subhead text-center">Total amount</div>
+                    <div class="md-title text-center"> {{getTotalTransaction(transaction)}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.transcation-container .transcation-time
+{
+    padding-left:20px;
+    position:relative;
+}
+.transcation-container .transcation-time:before
+{
+    content:"";
+    position:absolute;
+    top:10px;
+    left:-3px;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+}
+.transcation-container .transcation-time.buy:before
+{
+    background:#00897B;
+}
+.transcation-container .transcation-time.sell:before
+{
+    background:#5E35B1;
+}
+
+.transcation-container .transcation-row
+{
+    padding-left:20px;
+}
+
+</style>

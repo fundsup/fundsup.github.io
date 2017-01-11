@@ -1,0 +1,16 @@
+ <form ng-cloak name="addToWalletFrom">
+     <md-input-container class="md-block">
+        <!-- Use floating placeholder instead of label -->
+        <md-icon class="money"><i class="material-icons">Money</i></md-icon>
+        <input ng-model="money" type="number" placeholder="Money (required)" ng-required="true">
+        <div ng-messages="addToWalletFrom.money.$error">
+            <div ng-message="required">This is required.</div>
+        </div>
+
+
+    </md-input-container>
+    <md-input-container class="md-block">
+            <md-button class="md-raised md-primary" ng-disabled="loading" ng-click="addToWallet()">Add</md-button>
+            
+    </md-input-container>
+ </form>
