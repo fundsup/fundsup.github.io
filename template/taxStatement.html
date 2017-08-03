@@ -1,0 +1,82 @@
+<div class="card-view" >
+	<div class="card-view-inner">
+		<div layout="row">
+			<div flex class="md-title text-center">Tax Statement for FY 
+			<md-select name="type" ng-model="financialYear" required style="display: inline-block;">
+				<md-option value="2017">17-18</md-option>
+				<md-option value="2016">16-17</md-option>
+			  </md-select>
+		  </div>
+		</div>
+		<div layout="row">
+			<div flex >
+                <div class="md-subhead text-center">Taxable capital gain</div>
+                <div class="md-title text-center">{{fix(totalGain)}}</div>
+            </div>
+            <div flex >
+                
+                <div class="md-subhead text-center">Tax amount</div>
+                <div class="md-title text-center"> {{fix(totalGain)*0.15}}</div> 
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="card-view" ng-repeat="tax in taxStatement">
+	<div class="card-view-inner">
+        <div >
+			 <div layout="row" ng-click="tax.open =!tax.open">
+				<div flex="70" >
+					<div class="md-subhead  text-left"><i class="tax-expand fa fa-angle-right" ng-class="tax.open?'fa-angle-down':'fa-angle-right'" ></i>{{tax.fund.name}}</div>
+				</div>
+				<div flex="30" >
+					<div class="md-title text-right"> {{fix(tax.tax)}}</div>
+				</div>
+			 </div>
+			<div layout="row" ng-if="tax.open">
+				<div  flex="100">
+					<div flex >
+						<div class="md-subhead text-center">Holded days</div>
+						<div class="md-title text-center">{{tax.days}}</div>
+					</div>
+					<div flex >
+						
+						<div class="md-subhead text-center">Quantity</div>
+						<div class="md-title text-center"> {{tax.quantity}}</div> 
+					</div>
+				</div>
+				<div  flex="100">
+					<div flex >
+						<div class="md-subhead text-center">Bought on</div>
+						<div class="md-title text-center"> {{getHumanTime(tax.buyTransaction.transaction_at)}}</div> 
+					</div>
+					<div flex >
+						<div class="md-subhead text-center">Sold on</div>
+						<div class="md-title text-center"> {{getHumanTime(tax.sellTransaction.transaction_at)}}</div> 
+					</div>
+				</div>
+				<div  flex="100">
+					
+					<div flex >
+						<div class="md-subhead text-center">Buy price</div>
+						<div class="md-title text-center"> {{tax.buyTransaction.price}}</div> 
+					</div>
+					<div flex >
+						<div class="md-subhead text-center">Sell price</div>
+						<div class="md-title text-center"> {{tax.sellTransaction.price}}</div> 
+					</div>
+				</div>
+				
+            </div>
+		</div>
+	</div>
+</div>
+<style>
+.tax-expand{
+	margin-right:5px;
+	cursor:pointer;
+	padding:4px;
+	
+}
+
+</style>
