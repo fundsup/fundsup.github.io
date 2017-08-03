@@ -270,7 +270,7 @@
 		<script>
 			var user = localStorage.getItem("user");
 			//var siteUrl = window.location.protocol+"//"+window.location.host+window.location.pathname;
-			var siteUrl = "https://test2.offerify.in/";
+			var siteUrl = "https://test2.offerify.in/fundsup/";
 			if(user != null && typeof user != "undefined" && user != "") user = JSON.parse(user);
 			var app = angular.module("fundsup",['ngMaterial','ngMessages','ui.router','hmTouchEvents','ngTouch'])
 			.run(['$state', '$rootScope', function($state, $rootScope) {
