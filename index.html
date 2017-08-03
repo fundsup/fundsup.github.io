@@ -3,7 +3,7 @@
 		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,700italic,700,500italic' rel='stylesheet' type='text/css' />
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Fundsup</title>
 		<style>
@@ -253,23 +253,24 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 		<!-- Angular Material requires Angular.js Libraries -->
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 	
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 
 		<!-- Angular Material Library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
 
 		<script src="js/hammer.min.js"></script>
 		<script src="js/angular.hammer.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-touch.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-touch.js"></script>
 		
 		<script>
 			var user = localStorage.getItem("user");
-			var siteUrl = window.location.protocol+"//"+window.location.host+window.location.pathname;
+			//var siteUrl = window.location.protocol+"//"+window.location.host+window.location.pathname;
+			var siteUrl = "https://test2.offerify.in/";
 			if(user != null && typeof user != "undefined" && user != "") user = JSON.parse(user);
 			var app = angular.module("fundsup",['ngMaterial','ngMessages','ui.router','hmTouchEvents','ngTouch'])
 			.run(['$state', '$rootScope', function($state, $rootScope) {
@@ -330,7 +331,11 @@
 					templateUrl: 'template/stockDetails.html',
 					controller:'stockDetailsController'
 				})
-				
+				.state('taxStatement', {
+					url: '/taxStatement/',
+					templateUrl: 'template/taxStatement.html',
+					controller:'taxStatementController'
+				})
 				
 				$urlRouterProvider.otherwise('/login');
 				
@@ -359,6 +364,66 @@
 
 				
 				
+			}])
+			.controller("taxStatementController",["$scope","$http","helperMethod","$stateParams",'$state',function($scope,$http,helperMethod,$stateParams,$state){
+			
+				$scope.taxStatement = [];
+				$scope.totalGain =0;
+				var today = new Date();
+				var currentYear = today.getFullYear();
+				var currentMonth = today.getMonth();
+				if(currentMonth<3){
+					$scope.financialYear = (currentYear -1).toString();
+				}
+				else{
+					$scope.financialYear = currentYear.toString();
+				}
+				
+				$scope.getTaxStatment = function(){
+				
+					$http.get(siteUrl+"api/getTaxStatement",{params:{token:user.token,fy:$scope.financialYear},data:""}).then(function(response){
+
+						if(response.data.relogin){helperMethod.logout(); return;}
+						if(response.data.success)
+						{
+							$scope.taxStatement = response.data.taxStatement;
+							$scope.totalGain = 0;
+							for(var i=0;i<$scope.taxStatement.length;i++){
+							 
+								$scope.totalGain = $scope.totalGain + parseFloat($scope.taxStatement[i].tax);
+							}
+						}
+						else
+						{
+							helperMethod.showToast("Not able to retrive the stock data");
+							$state.go("overview");
+						}
+						
+
+
+					},function(response){
+						helperMethod.showToast("Not able to retrive the stock data");
+						$state.go("overview");
+					});
+				
+				}
+				$scope.fix = function(d1)
+				{
+					return (parseFloat(d1)).toFixed(2);
+				}
+				$scope.getHumanTime = function(time)
+				{
+					var transDate = new Date(time);
+				
+					return transDate.getDate() +"-"+ (transDate.getMonth() + 1) +"-"+ transDate.getFullYear();
+				}
+				$scope.getTaxStatment();
+				$scope.$watch("financialYear",function(newValue,oldValue){
+					if(newValue == oldValue) return;
+					$scope.getTaxStatment();
+				
+				});
+			
 			}])
 			.controller("stockDetailsController",["$scope","$http","helperMethod","$stateParams",'$state',function($scope,$http,helperMethod,$stateParams,$state){
 				if($stateParams.id == null || $stateParams.id == "" || $stateParams.id == "undefined")
@@ -474,13 +539,18 @@
 					amount:0,
 					calculated:false,
 					quantity:0,
-					averagePrice:0,
+					averagePriceCal:0,
 					calculateAverage:function(){
 						
 						if($scope.averageCalculator.amount == "" || parseFloat($scope.averageCalculator.amount)<1) return;
 						
 						$scope.averageCalculator.quantity = $scope.fix($scope.fix($scope.averageCalculator.amount)/ $scope.fix($scope.stockData.stockCurrent.currentPrice));
-						$scope.averageCalculator.averagePrice = $scope.fix((parseFloat($scope.averageCalculator.amount) + parseFloat($scope.getCurrentMarketValue()))/(parseFloat($scope.averageCalculator.quantity) + parseFloat($scope.stockData.stock.quantity)));
+						var totalAmount = parseFloat($scope.averageCalculator.amount) + parseFloat($scope.getTotalInvest());
+						var totalQuantity = parseFloat($scope.averageCalculator.quantity) + parseFloat($scope.stockData.stock.quantity);
+						
+						
+						
+						$scope.averageCalculator.averagePriceCal =  $scope.fix(totalAmount / totalQuantity);
 						$scope.averageCalculator.calculated = true;
 						
 						
@@ -489,7 +559,7 @@
 						$scope.averageCalculator.amount = 0;
 						$scope.averageCalculator.calculated = false;
 						$scope.averageCalculator.quantity = 0;
-						$scope.averageCalculator.averagePrice= 0;
+						$scope.averageCalculator.averagePriceCal= 0;
 					}
 				}
 
