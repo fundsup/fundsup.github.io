@@ -588,6 +588,38 @@
 
 					$state.go("stockDetails",{id:st.id});
 				}
+				$scope.goToBuyStock = function(st)
+				{
+
+					$state.go("buyfund",{id:st.id,name:st.name});
+				}
+				$scope.gotoSellStock = function(st)
+				{
+
+					$state.go("sellfund",{id:st.id,name:st.name});
+				}
+				$scope.removeFromWatch = function(st,$index)
+				{
+					$http.post(siteUrl+"api/removeStock",{fund:st.id,token:user.token}).then(function(response){
+							
+							if(response.data.relogin){helperMethod.logout(); return;}
+
+							if(response.data.success){
+								helperMethod.showToast(response.data.message);
+								$scope.stocks.splice($index,1);
+							}else
+							{
+								
+								
+								helperMethod.showToast(response.data.message);
+							}
+
+
+						},function(){
+								helperMethod.showToast("sorry unable to remove try again");
+						});
+					
+				}
 				$scope.fabOpen = false;
 				$scope.getDashboard = function()
 				{
