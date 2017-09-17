@@ -116,14 +116,15 @@
                                  </div>
                             </div>
                             <div layout="row"  class="swipe-out-actions">
-                                <div flex="33" class="text-center current-price">
-                                    {{st.currentPrice}}
-                                </div>
-                                <div flex="33" class="text-center buy-icon">
+                               
+                                <div flex="33" class="text-center buy-icon" ng-click="goToBuyStock(st)">
                                     Buy
                                 </div>
-                                <div flex="33" class="text-center sell-icon">
+                                <div flex="33" class="text-center sell-icon" ng-click="gotoSellStock(st)">
                                     Sell
+                                </div>
+				<div flex="33" class="text-center" ng-click="removeFromWatch(st)">
+                                   <i class="material-icons">delete</i>
                                 </div>
                             </div>
                         </div>
