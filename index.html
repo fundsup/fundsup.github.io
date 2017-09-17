@@ -598,8 +598,9 @@
 
 					$state.go("sellfund",{id:st.id,name:st.name});
 				}
-				$scope.removeFromWatch = function(st,$index)
+				$scope.removeFromWatch = function(st,$index,event)
 				{
+					event.stopPropagation();
 					$http.post(siteUrl+"api/removeStock",{fund:st.id,token:user.token}).then(function(response){
 							
 							if(response.data.relogin){helperMethod.logout(); return;}
