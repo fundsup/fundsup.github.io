@@ -660,7 +660,21 @@
 						
 					});
 
+				};
+				$scope.getRecommendations = function()
+				{
+					$http.get(siteUrl+"api/recommendation",{params:{token:user.token},data:""}).then(function(response){
+
+							$scope.recommendations = response.data;
+
+
+
+						},function(response){
+
+					});
+
 				}
+				$scope.getRecommendations();
 				$scope.getDashboard();
 				$scope.loadedTime = (new Date()).getTime()/1000;
 				$scope.updatedTime = "few seconds ago";
