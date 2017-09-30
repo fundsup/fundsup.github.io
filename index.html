@@ -562,10 +562,23 @@
 						$scope.averageCalculator.averagePriceCal= 0;
 					}
 				}
-
-
-
-
+				
+				$scope.splitFund = {
+					ratio:1,
+					isLoading:false,
+					onClick:function(){
+						
+						if($scope.splitFund.isLoading) return;
+						$scope.splitFund.isLoading =true;
+						$http.post(siteUrl+"api/stockSplit",{fund:$stateParams.id,ratio:$scope.splitFund.ratio}).then(function(){
+							helperMethod.showToast("stock split successful");
+						},function(){
+							helperMethod.showToast("unable to split the stock");
+						}).finally(function(){
+							$scope.splitFund.isLoading = false;
+						});
+					}
+				}
 			}])
 			.controller("overviewController",["$scope","$http","$interval","$mdDialog",'helperMethod','$state',function($scope,$http,$interval,$mdDialog,helperMethod,$state){
 				
