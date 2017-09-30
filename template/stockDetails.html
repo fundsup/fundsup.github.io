@@ -128,7 +128,7 @@
 		 <label>Ratio 1:</label>
 		<input type="number" ng-model="splitFund.ratio"/>
 	</md-input-container>	
-	<md-button class="md-raised md-primary" ng-click="splitFund.onClick()">Split</md-button>
+	<md-button class="md-raised md-primary" ng-disabled="splitFund.isLoading" ng-click="splitFund.onClick()">Split</md-button>
     </div>
 	
 </div>
