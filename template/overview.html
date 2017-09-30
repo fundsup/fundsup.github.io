@@ -47,7 +47,18 @@
         </div>
     </div>
 </div>
-
+<div layout="row">
+    <div class="card-view">
+        <div class="card-view-inner">
+            <div layout="row" class="md-subhead updated-time">
+                Recommendation
+            </div>
+            <div layout="row" ng-repeat="sms in recommendations">
+            	{{sms.msg}}
+            </div>
+        </div>
+    </div>
+</div>
 <div layout="row">
     <div class="card-view">
         <div class="card-view-inner">
