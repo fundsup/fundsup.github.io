@@ -224,7 +224,7 @@
 			      <md-toolbar class="md-theme-indigo">
 				<h1 class="md-toolbar-tools">Sidenav Left</h1>
 			      </md-toolbar>
-			      <md-content layout-padding ng-controller="LeftCtrl">
+			      <md-content layout-padding ng-controller="sideBarController">
 				<md-button ng-click="close()" class="md-primary" hide-gt-md>
 				  Close Sidenav Left
 				</md-button>
@@ -606,6 +606,17 @@
 					}
 				}
 			}])
+			 .controller('sideBarController',['$scope','$mdSidenav', function ($scope, $mdSidenav) {
+			    $scope.close = function () {
+
+			      $mdSidenav('left').close()
+				.then(function () {
+				 
+				});
+
+			    };
+			  }])
+			
 			.controller("overviewController",["$scope","$http","$interval","$mdDialog",'helperMethod','$state',function($scope,$http,$interval,$mdDialog,helperMethod,$state){
 				
 				$scope.dashboard = {
