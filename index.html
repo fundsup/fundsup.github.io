@@ -514,26 +514,29 @@
 
 				}
 
-				$http.get(siteUrl+"api/getStockDetails",{params:{id:$stateParams.id,token:user.token},data:""}).then(function(response){
+				$scope.getStockDetails = function(){
+					$http.get(siteUrl+"api/getStockDetails",{params:{id:$stateParams.id,token:user.token},data:""}).then(function(response){
 
-					if(response.data.relogin){helperMethod.logout(); return;}
-					if(response.data.success)
-					{
-						$scope.stockData = response.data.stockData;
-					}
-					else
-					{
+						if(response.data.relogin){helperMethod.logout(); return;}
+						if(response.data.success)
+						{
+							$scope.stockData = response.data.stockData;
+						}
+						else
+						{
+							helperMethod.showToast("Not able to retrive the stock data");
+							$state.go("overview");
+						}
+
+
+
+					},function(response){
 						helperMethod.showToast("Not able to retrive the stock data");
 						$state.go("overview");
-					}
+					});	
 					
-
-
-				},function(response){
-					helperMethod.showToast("Not able to retrive the stock data");
-					$state.go("overview");
-				});
-				
+				}
+				$scope.getStockDetails();
 				
 				$scope.averageCalculator = {
 					amount:0,
@@ -572,6 +575,7 @@
 						$scope.splitFund.isLoading =true;
 						$http.post(siteUrl+"api/stockSplit",{fund:$stateParams.id,ratio:$scope.splitFund.ratio,token:user.token}).then(function(){
 							helperMethod.showToast("stock split successful");
+							$scope.getStockDetails();
 						},function(){
 							helperMethod.showToast("unable to split the stock");
 						}).finally(function(){
