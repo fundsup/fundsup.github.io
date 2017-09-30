@@ -570,7 +570,7 @@
 						
 						if($scope.splitFund.isLoading) return;
 						$scope.splitFund.isLoading =true;
-						$http.post(siteUrl+"api/stockSplit",{fund:$stateParams.id,ratio:$scope.splitFund.ratio}).then(function(){
+						$http.post(siteUrl+"api/stockSplit",{fund:$stateParams.id,ratio:$scope.splitFund.ratio,token:user.token}).then(function(){
 							helperMethod.showToast("stock split successful");
 						},function(){
 							helperMethod.showToast("unable to split the stock");
