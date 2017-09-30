@@ -208,38 +208,35 @@
 		
 	</head>
 	<body ng-app="fundsup">
-		<div class="header-outer-wrapper">
-			<div class="logo">
-				FundsUp
+		<section layout="row" flex>
+		<md-sidenav
+			class="md-sidenav-left"
+			md-component-id="left"
+			md-is-locked-open="$mdMedia('gt-md')"
+			md-whiteframe="4">
+
+		      <md-toolbar class="md-theme-indigo">
+			<h1 class="md-toolbar-tools">Sidenav Left</h1>
+		      </md-toolbar>
+		      <md-content layout-padding ng-controller="sideBarController">
+			<md-button ng-click="close()" class="md-primary" hide-gt-md>
+			  Close Sidenav Left
+			</md-button>
+			<p hide show-gt-md>
+			  This sidenav is locked open on your device. To go back to the default behavior,
+			  narrow your display.
+			</p>
+		      </md-content>
+
+		    </md-sidenav>
+		<md-content flex layout-padding>
+			<div class="header-outer-wrapper">
+				<div class="logo">
+					FundsUp
+				</div>
 			</div>
-		</div>
-		
-		<div class="outer-wrapper">	
-			 <md-sidenav
-				class="md-sidenav-left"
-				md-component-id="left"
-				md-is-locked-open="$mdMedia('gt-md')"
-				md-whiteframe="4">
-
-			      <md-toolbar class="md-theme-indigo">
-				<h1 class="md-toolbar-tools">Sidenav Left</h1>
-			      </md-toolbar>
-			      <md-content layout-padding ng-controller="sideBarController">
-				<md-button ng-click="close()" class="md-primary" hide-gt-md>
-				  Close Sidenav Left
-				</md-button>
-				<p hide show-gt-md>
-				  This sidenav is locked open on your device. To go back to the default behavior,
-				  narrow your display.
-				</p>
-			      </md-content>
-
-			    </md-sidenav>
-			
-			
+			<div class="outer-wrapper">	
 			<ui-view></ui-view>
-		
-		
 			<md-fab-speed-dial md-open="fabOpen" md-direction="up" class="md-scale fab-container">
 				<md-fab-trigger>
 				<md-button aria-label="menu" class="md-fab md-warn">
@@ -269,9 +266,7 @@
 				made with <i class="fa fa-heart" aria-hidden="true"></i> fundsup
 			</div>
 		</div>
-		
-		
-		
+		</md-content>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 		<!-- Angular Material requires Angular.js Libraries -->
